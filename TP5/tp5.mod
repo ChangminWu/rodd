@@ -25,6 +25,8 @@ float a= 1 div (dmax-dmin);
 dvar float+ x[mode][temps];
 dvar float+ s[temps];
 dvar boolean y[mode][temps];
+dexpr float expr1[t in temps] = sum(m in mode)x[m][t]-s[t] + s[t-1]==d[t];
+
 execute{
   for(var t in temps){
     	d[t]=a;
@@ -34,8 +36,7 @@ execute{
 minimize
   sum(m in mode)(sum(t in temps)(p[m][t]*x[m][t]+f[m][t]*y[m][t]))+sum(t in temps)h[t]*s[t];
 subject to{
-	forall(t in temps)
-		sum(m in mode)x[m][t]-s[t]+s[t-1]==d[t];
+	forall(t in temps)expr1[t];
     forall(m in mode){
       forall(t in temps){
 		x[m][t]<=(sum(t1 in temps)d[t1])*y[m][t];
