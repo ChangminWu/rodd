@@ -5,7 +5,7 @@
  *********************************************/
 int T=...;
 int M=...;
-
+int R=T;
 int dmin=...;
 int dmax=...;
 
@@ -55,12 +55,20 @@ subject to{
     }
     //global 
     sum(t in temps)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+	//glissant
+	/*
+	forall(t in temps)
+		sum(t in 1..R)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+	*/
+	forall(t in temps)
+	  forall(m in mode)
+	    x[t][m]>=0.000001;
 }
 
 execute{
     writeln("s[");
 	for(var t in temps){
-	      write(s[t]);
+	      write(s[t]," ");
 	}
 	writeln("]");
 	writeln("x[");
