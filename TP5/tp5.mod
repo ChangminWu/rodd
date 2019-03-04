@@ -36,19 +36,24 @@ execute{
 minimize
   sum(m in mode)(sum(t in temps)(p[t][m]*x[t][m]+f[t][m]*y[t][m]))+sum(t in temps)h[t]*s[t];
 subject to{
-	forall(t in temps)
-	  forall(t2 in temps)
+	forall(t in temps){
+	  forall(t2 in temps){
 	    if(t2==t-1){
 	    	sum(m in mode)x[t][m]-s[t] + s[t2]==d[t];
 	    }
+ 	  }	  
+	}	 
 	    
-    forall(t in temps){
-      forall(m in mode){
-		x[t][m]<=(sum(t1 in temps)d[t1])*y[t][m];
-        }
-      }
-    //period
-    
+	forall(t in temps){
+       forall(t1 in temps){
+			forall(m in mode){          
+              if(t1==t){
+		    	(sum(t1 in t1..T)d[t1])*y[t][m]>=x[t][m];
+		      }
+		   }
+		}
+    }
+    //global 
     sum(t in temps)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
 }
 
