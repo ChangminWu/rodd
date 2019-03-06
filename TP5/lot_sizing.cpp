@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        for (i=0; i<T-R; i++) {
+        for (i=0; i<=T-R; i++) {
             IloExpr inequa(env);
             for (j=0; j<M; j++) {
                 for (k=i; k<i+R; k++) {
