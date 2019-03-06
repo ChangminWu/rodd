@@ -5,7 +5,6 @@
  *********************************************/
 int T=...;
 int M=...;
-int R=T;
 int dmin=...;
 int dmax=...;
 
@@ -17,29 +16,36 @@ int f[temps][mode]=...;
 int e[temps][mode]=...;
 
 int h[temps]=...;
-float d[temps];
+int d[temps]=[20,25,30,35,40,45,50,55,60,65];
 int Emax[temps]=...;
 
-float a= 1 /(dmax-dmin);
+int R=1;
+int period=ftoi(floor(T/R));
+/*
+//generate d[t] par random
+int myRange = 50;
+int randomArray[i in 1..10] = 20 + rand(myRange);
+execute{
+    for(t in temps){
+      d[t]=randomArray[t];
+      }
+	writeln("randomArray="+randomArray);
+}
+*/
 //variables
 dvar float+ x[temps][mode];
 dvar float+ s[temps];
 dvar boolean y[temps][mode]; 
-//dexpr float expr1[t in temps] = sum(m in mode)x[m][t]-s[t] + s[t-1]==d[t];
 
-execute{
-  for(var t in temps){
-    	d[t]=a;
-    }
-  }
 //objective
 minimize
   sum(m in mode)(sum(t in temps)(p[t][m]*x[t][m]+f[t][m]*y[t][m]))+sum(t in temps)h[t]*s[t];
+
 subject to{
 	forall(t in temps){
 	  forall(t2 in temps){
 	    if(t2==t-1){
-	    	sum(m in mode)x[t][m]-s[t] + s[t2]==d[t];
+	      (sum(m in mode)x[t][m])-s[t] + s[t2]==d[t];
 	    }
  	  }	  
 	}	 
@@ -48,21 +54,28 @@ subject to{
        forall(t1 in temps){
 			forall(m in mode){          
               if(t1==t){
-		    	(sum(t1 in t1..T)d[t1])*y[t][m]>=x[t][m];
+		    	(sum(t1 in t1..T)d[t1])*y[t1][m]>=x[t1][m];
 		      }
 		   }
 		}
     }
+    //period
+    /*forall(t in temps)
+      (sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+    */
     //global 
-    sum(t in temps)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+    //sum(t in temps)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
 	//glissant
 	/*
-	forall(t in temps)
-		sum(t in 1..R)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+	sum(t in 1..5)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
+	sum(t in 6..10)(sum(m in mode)((e[t][m]-Emax[t])*x[t][m]))<=0;
 	*/
-	forall(t in temps)
-	  forall(m in mode)
-	    x[t][m]>=0.000001;
+	
+	forall(p in 1..period)
+	   {sum(t1 in (((p-1)*R+1)..p*R))(sum(m in mode)((e[t1][m]-Emax[t1])*x[t1][m]))<=0;}
+	
+	sum(t1 in (period*R+1)..T)(sum(m in mode)((e[t1][m]-Emax[t1])*x[t1][m]))<=0;
+	
 }
 
 execute{
