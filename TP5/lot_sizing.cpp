@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cmath>
-#include <chrono> 
+#include <chrono>
 using namespace std;
 
 ILOSTLBEGIN
@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     auto start = chrono::high_resolution_clock::now();
     int i, j, k;
     float readFloat;
-    
+
     IloInt T;
     IloInt M;
     IloInt R;
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     IloNumArray f;
     IloNumArray e;
     IloNumArray dt;
-    
+
     try{
         if (argc > 1) {
             T = atoi(argv[1]);
@@ -43,15 +43,15 @@ int main(int argc, char **argv) {
             f = IloNumArray(env);
             istringstream istream(argv[7]);
             for (i=0; i<M; i++){
-                istream >> readFloat; 
+                istream >> readFloat;
                 f.add(readFloat);
             }
 
             e = IloNumArray(env);
             istringstream istream1(argv[8]);
             for (i=0; i<M; i++){
-                istream1 >> readFloat; 
-                e.add(readFloat); 
+                istream1 >> readFloat;
+                e.add(readFloat);
 
             }
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
             f = IloNumArray(env, M, 10, 30, 60, 90);
             e = IloNumArray(env, M, 8, 6, 4, 2);
         }
-        
+
         DataMatrix x(env, T);
         for (i=0; i<T; i++) {
             x[i] = IloNumVarArray(env, M, 0.0, IloInfinity);
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
 
         IloNumVarArray s = IloNumVarArray(env, T, 0.0, IloInfinity);
 
-        BoolMatrix y(env, T); 
+        BoolMatrix y(env, T);
         for (i=0; i<T; i++) {
             y[i] = IloBoolVarArray(env, M);
         }
@@ -104,6 +104,7 @@ int main(int argc, char **argv) {
             for (j=1; j<M; j++) {
                 equa += x[i][j];
             }
+            //应该是i，而且需要加入t=1，单拿出来，因为s[0]没有定义，定义s[0]=0
             equa += s[j-1] - s[j];
             model.add(equa == dt[i]);
             equa.end();
@@ -174,7 +175,7 @@ int main(int argc, char **argv) {
     catch (...) {
         cerr << "Unknown exception caught" << endl;
     }
-    
+
     env.end();
     return 0;
 }
