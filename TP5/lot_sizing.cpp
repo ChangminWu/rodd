@@ -101,10 +101,13 @@ int main(int argc, char **argv) {
 
         for (i=0; i<T; i++) {
             IloExpr equa(env);
-            for (j=1; j<M; j++) {
+            for (j=0; j<M; j++) {
                 equa += x[i][j];
             }
-            equa += s[j-1] - s[j];
+            if (i>0) {
+                equa += s[i-1] - s[i];
+            }
+            else {equa -= s[i];}
             model.add(equa == dt[i]);
             equa.end();
         }
