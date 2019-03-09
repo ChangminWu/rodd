@@ -1,0 +1,159 @@
+\documentclass[12pt,a4paper]{article} 
+
+\usepackage{amsmath,amsfonts,amssymb,latexsym,graphicx,array}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage[a4paper, margin={3cm, 3cm}]{geometry}
+\usepackage{subfigure}
+\usepackage{epstopdf}
+\usepackage{ragged2e}
+
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% page titre
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{page}{0}
+
+
+\begin{center}
+
+% logo
+\begin{minipage}[l]{.2\linewidth}
+	\flushleft\includegraphics[width=4cm]{img/logo_ENSTA.jpg}
+\end{minipage}
+\begin{minipage}[r]{.35\linewidth}
+	\flushright\includegraphics[width=4cm]{img/logo_CNAM.png}
+\end{minipage}
+\begin{minipage}[r]{.3\linewidth}
+	\flushright\includegraphics[width=4cm]{img/logo_X.jpg}
+\end{minipage}
+\vspace{1.5cm}
+
+% titre
+\hrule \vspace{0.5cm}
+\begin{LARGE}
+	\textbf{RODD-Lot sizing}\\
+\end{LARGE}
+\vspace{0.5cm} \hrule
+\vspace{3cm}
+
+% noms
+\definecolor{carmine}{rgb}{0.59, 0.0, 0.09}
+\begin{Large}\color{carmine}
+	Changmin WU\\
+	Ling MA\\
+\end{Large}
+\vspace{5cm}
+
+% Nom écoles
+\begin{large}
+	\textit{Conservatoire National des Arts et Métiers\\
+	--\\
+	\'Ecole Polytechnique\\
+	--\\
+	\'Ecole Nationale Supérieure de Techniques Avancées\\}
+\end{large}
+\vfill
+
+% date
+\today
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Définition du modèle}
+\[
+	min\qquad \sum_{m=1}^M \sum_{t=1}^T (p_t^mx_t^m + f_t^my_t^m)+ \sum_{t=1}^T h_t(s_t)
+\]
+
+\[
+	s.c.\qquad \sum_{m=1}^M x_t^m - s_t+s_{t-1}=d_t\qquad \forall i \in [\![1,n]\!]
+\]
+\[
+	\qquad \qquad \qquad \qquad x_t^m<=(\sum_{t'=t}^T d_t')y_t^m\qquad \forall t \in [\![1,T]\!],\forall m \in [\![1,M]\!]
+\]
+\[
+	\qquad \sum_{t'=t}^{t+R-1}\sum_{m=1}^M(e_{t'}^m-E_{t'}^{max})x_{t'}^m<=0\qquad \forall t \in [\![1,T-R+1]\!],\forall m \in [\![1,M]\!]
+\]
+
+\begin{flushright}
+Cas particuliers:\newline
+[R=1]: Contrainte périod;\newline
+[R=T]:Contrainte global;\newline
+\end{flushright}
+
+
+Pour le contrainte glissant,  par example: si R=8, on a
+\[
+	\qquad \sum_{t'=1}^{8}\sum_{m=1}^M(e_{t'}^m-E^{max}_{t'})x_{t'}^m<=0\qquad \forall m \in [\![1,M]\!]
+\]
+
+\[
+	\qquad \sum_{t'=2}^{9}\sum_{m=1}^M(e_{t'}^m-E^{max}_{t'})x_{t'}^m<=0\qquad \forall m \in [\![1,M]\!]
+\]
+
+\[
+	\qquad \sum_{t'=3}^{10}\sum_{m=1}^M(e_{t'}^m-E^{max}_{t'})x_{t'}^m<=0\qquad \forall m \in [\![1,M]\!]
+\]
+\newpage
+\section{Analyser le coût total et la valeur de l'émissoin carbone moyenne}
+
+ \begin{minipage}[r]{.99\linewidth}
+	\center\includegraphics[width=12cm]{img/10-4-3/10-4-3.png}
+\begin{center}
+Cette solution est donné par une dt avec une distribution uniform :
+[20,25,30,35,40,45,50,55,60,65]
+\end{center}
+
+\end{minipage}
+\begin{minipage}[b]{.48\linewidth}
+	\center\includegraphics[width=7cm]{img/10-4-3/10-4-3-1.png}
+	\begin{center}
+	[40,30,20,50,34,53,66,80,23,31]
+	\end{center}
+\end{minipage}
+\begin{minipage}[b]{.48\linewidth}
+	\center\includegraphics[width=7cm]{img/10-4-3/10-4-3-2.png}
+	\begin{center}
+	[45,38,23,56,22,56,43,56,65,66]
+\end{center}
+\end{minipage}
+\section{Analyser les résultats}
+\begin{justify}
+D'abord, On sait que $f_m=[10,30,60,90],e_m=[8,6,4,2]$, c'est à dire, le mode qui émit plus de carbone cout mois chèr. L'objective contient un coût fixé de production et un coût de stockage. , le change de distribution uniform ne change pas la tendance.
+
+1) En général, le coût total a une tendance d'abord diminuer et ensuit augement quand R augement. Le coût le plus haut est quand le longeur d'intervalle est fixé à 1. Car il faut vérifier le contrainte d'émission carbone par chaque pas de temps et il existe pas de compensation entre les périods.Quand le horizon glissant de longeur fixé devient plus grand, on peut compenser l'émission entre une plus grande intervalle, le bound pour un pas de temps  est relâché, on peut lancer les modes qui émittent plus de carbone qui coute moins chèrs dans une période, si l'émission de quelques périods dépassent le limit d'émission, on peut quand même vérifer la contrainte par diminuer ceux des autres périods pour obtenir une solution optimal.
+
+2) En général, l'émission carbone moyenne a une tendance d'abord augumenter et ensuit diminuer un peu quand R augement. L'émisson le plus bas est quand le longeur d'intervalle est fixé à 1. Car il n'y a pas de compensation entre les périods, chaque pas de temps, on ne peut pas émitter plus de carbone que le limit. Mais quand R augement, le bound pour un pas de temps est relâché grâce à la compensation , pour obtenir un coût minimum, one peut  on peut lancer les modes qui émittent plus de carbone qui coute moins chèrs dans un pas de temps, si l'émission de quelques périods dépassent le limit d'émission, on peut quand même vérifer la contrainte par diminuer ceux des autres périods. 
+
+3) En général, le coût total a une tendance qui inverse la tendance de l'émission carbone moyenne augument. C'est à dire que on peut éconimiser plus par choisir les modes qui émittent plus de carbone.
+
+4) Le coût total le plus bas l'émission le plus haut sont à R=8.
+
+ \end{justify}
+\section{Analyser l'impact}
+\subsection{La limit de émission carbone moyenne}
+\subsection{nombre de mode}
+\subsection{longeur de l'horizon}
+\section{Résultats}
+
+On utilise donc un code python pour modéliser le processus des états. Après avoir lancé plusieurs simulations de 10 minutes, et en avoir fait la moyenne, nous obtenons les pourcentages de blocages des stations suivant :
+
+\begin{tabular}{ l l l }
+	 Station & Proba de blocage & Intervale de confiance \\
+   1 & 94.684 \% & [ 0.946510509259 , 0.947169490741 ] \\
+   2 & 12.677 \% & [ 0.121357637325 , 0.132182362675 ] \\
+   3 & 0.493 \% & [ 0.0 , 0.0110975385951 ] \\
+   4 & 15.649 \% & [ 0.151261844714 , 0.161718155286 ] \\
+   5 & 13.152 \% & [ 0.126137078277 , 0.136902921723 ] \\
+ \end{tabular}
+
+
+\end{document}
