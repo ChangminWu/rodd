@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="ASCII"?><project>
 	<version>1.0</version>
 	<configs>
-		<config default="true" name="Configuration1" category="opl">
-			<ref name="tp4.mod" type="model">
+		<config default="false" name="approcheP2" category="opl">
+			<ref type="model" name="tp4-P2.mod">
 			</ref>
-			<ref name="ExplForet.dat" type="data">
+			<ref type="data" name="ExplForet.dat">
+			</ref>
+		</config>
+		<config default="true" name="approcheP1" category="opl">
+			<ref type="data" name="ExplForet.dat">
+			</ref>
+			<ref type="model" name="tp4-P1.mod">
 			</ref>
 		</config>
 	</configs>

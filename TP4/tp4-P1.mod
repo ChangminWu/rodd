@@ -38,31 +38,18 @@ execute{
 
 // TU matrice: Point extremes sont entier, donc pas besoin de mettre x, y = int
 // quand ajout contraint, plus TU. faut mettre x = int
-dvar float+ x[1..m][1..n];
-dvar float+ y[1..m][1..n][1..m][1..n];
+dvar int+ x[1..m][1..n];
+dvar int+ y[1..m][1..n][1..m][1..n];
+dvar float+ d[1..m][1..n];
 maximize
-  w1 * sum(i in 1..m, j in 1..n) t[i][j] * (1-x[i][j]) + w2 * g * L * sum(i in 1..m, j in 1..n, k in 1..m, b in 1..n)  adj[i][j][k][b] *(x[i][j] - y[i][j][k][b]) + w2 * g * L * sum(i in 1..m) (x[i][1] + x[i][n]) + w2 * g * L * sum(i in 1..n) (x[1][i] + x[m][i]);
-subject to{
-	forall (i in 1..m, j in 1..n, k in 1..m, b in 1..n: adj[i][j][k][b]==1) {
-		1-x[i][j]-x[k][b]+y[i][j][k][b] >= 0;
-		y[i][j][k][b]>=0;}
-		//y[i][j][k][b]<=x[i][j];
-		//y[i][j][k][b]<=x[k][b]; }	
-	forall (i in 1..m, j in 1..n) {
-		x[i][j] <= 1;	
-	}
-//	sum (i in 1..m, j in 1..n) x[i][j] >= 60;
-} 
-//dvar float+ d[1..m][1..n];
-//maximize
-//  w1 * sum(i in 1..m, j in 1..n) t[i][j] * (1-x[i][j]) + w2 * g * L * sum(i in 1..m, j in 1..n) (4*x[i][j]-d[i][j]);
-//subject to {
-// forall (i in 1..m, j in 1..n) 
-// 	x[i][j] <= 1;
-// forall (i in 1..m, j in 1..n)
-//    d[i][j] >= sum(k in 1..m, b in 1..n) adj[i][j][k][b] * x[k][b] - sum(k in 1..m, b in 1..n) adj[i][j][k][b] * (1-x[i][j]);
-// sum(i in 1..m, j in 1..n) x[i][j] >= 60;   
-//}  
+  w1 * sum(i in 1..m, j in 1..n) t[i][j] * (1-x[i][j]) + w2 * g * L * sum(i in 1..m, j in 1..n) (4*x[i][j]-d[i][j]);
+subject to {
+ forall (i in 1..m, j in 1..n) 
+ 	x[i][j] <= 1;
+ forall (i in 1..m, j in 1..n)
+    d[i][j] >= sum(k in 1..m, b in 1..n) adj[i][j][k][b] * x[k][b] - sum(k in 1..m, b in 1..n) adj[i][j][k][b] * (1-x[i][j]);
+    sum(i in 1..m, j in 1..n) x[i][j] >= 60;   
+}  
 
 execute{
 	var eff1 = 0;
