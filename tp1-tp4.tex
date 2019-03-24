@@ -1,0 +1,207 @@
+\documentclass[12pt,a4paper]{article} 
+
+\usepackage{amsmath,amsfonts,amssymb,latexsym,graphicx,array}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage[a4paper, margin={3cm, 3cm}]{geometry}
+\usepackage{subfigure}
+\usepackage{epstopdf}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{multirow}
+
+\newcommand\MyBox[2]{
+  \fbox{\lower0.75cm
+    \vbox to 1.7cm{\vfil
+      \hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+      \vfil}%
+  }%
+}
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% page titre
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{page}{0}
+
+
+\begin{center}
+
+% logo
+\begin{minipage}[l]{.2\linewidth}
+	\flushleft\includegraphics[width=4cm]{img/logo_ENSTA.png}
+\end{minipage}
+\begin{minipage}[r]{.35\linewidth}
+	\flushright\includegraphics[width=4cm]{img/logo_CNAM.png}
+\end{minipage}
+\begin{minipage}[r]{.3\linewidth}
+	\flushright\includegraphics[width=4cm]{img/logo_X.jpg}
+\end{minipage}
+\vspace{1.5cm}
+
+% titre
+\hrule \vspace{0.5cm}
+\begin{LARGE}
+	\textbf{RODD-TP4}\\
+\end{LARGE}
+\vspace{0.5cm} \hrule
+\vspace{3cm}
+
+% noms
+\definecolor{carmine}{rgb}{0.59, 0.0, 0.09}
+\begin{Large}\color{carmine}
+	Changmin WU\\
+	Ling MA\\
+\end{Large}
+\vspace{5cm}
+
+% Nom écoles
+\begin{large}
+	\textit{Conservatoire National des Arts et Métiers\\
+	--\\
+	\'Ecole Polytechnique\\
+	--\\
+	\'Ecole Nationale Supérieure de Techniques Avancées\\}
+\end{large}
+\vfill
+
+% date
+\today
+\end{center}
+
+\thispagestyle{empty}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Question i)}
+L'objective est de maximiser le polulation de deux type d'animaux. e1 habite dans la partie non occupé. et e2 habite dans le coté appartenant à la lisière, noté $4x_{ij}-d_{ij}$. La matrice $d_{ij}$ est nombre de parcelles adjacents et occupés.
+
+\section{Question ii)}
+$
+	\max w_{1} \times \sum\limits_{i=1}^{m} \sum\limits_{j=1}^{n} t_{i,j} \left(1-x_{i,j}\right) + w_{2} \cdot g \cdot L \times \sum\limits_{i=1}^{m} \sum\limits_{j=1}^{n} \sum\limits_{h}^{m} \sum\limits_{l}^{n} A_{i,j,h,l}\cdot \left(x_{i,j} - y_{i,j,h,l}\right)+ w_{2} \cdot g \cdot L \cdot \sum\limits_{i=1}^{m} \left(x_{i,1}+x_{i,n}\right) + w_{2}\cdot g \cdot L \cdot \sum\limits_{i=1}^{n} \left(x_{1,i}+x_{m,i}\right)
+$
+
+\[
+	s.c.\qquad -y_{ijhl}+x_{ij}+x_{hl}<=1\qquad \forall i,j,h,l \in [\![1,n]\!]
+	\eqno{(1)}
+\]
+\[
+	\qquad \qquad \qquad \qquad -y_{ijhl}<=0\qquad \forall i,j,h,l \in [\![1,n]\!]
+	\eqno{(2)}
+\]
+\[
+	\qquad -x_{ij}<=0\qquad \forall i,j\in [\![1,n]\!]
+	\eqno{(3)}
+\]
+\[
+	\qquad x_{ij}<=1\qquad \forall i,j\in [\![1,n]\!]
+	\eqno{(4)}
+\]
+
+\begin{justify}
+explication:
+on ajoute un variable $y_{ijhl}=x_{ij}*x_{hl}$, avec carré ij et hl sont adjacentes. Il faut linériser cette contrainte par $y_{ijhl}\leq xij$,
+$y_{ijhl}\leq x_{hl}$ et $y_{ijhl}\geq x_{ij}+x_{hl}-1$, avec$ 
+y_{ijhl}\geq 0$, avec $x={0,1}$ le coefficient de y est négative, on a seulement besoin $y_{ijhl}\geq x_{ij}+x_{hl}-1$.
+
+\end{justify} 
+\section{Question iii)}
+
+\centering
+\begin{tikzpicture}[
+                        solid/.style = {circle, draw, fill = red, minimum size = 0.3cm},
+                        empty/.style = {circle, draw, fill = white, minimum size = 0.3cm}]
+
+                        \node [empty,label=below:$x_{11}$] (A) at (1,1) {};
+                        \node [empty,label=left:$x_{12}$] (B) at (1,2) {};
+                        \node [empty,label=left:$x_{13}$] (C) at (1,3) {};
+                        \node [empty,label=above:$x_{14}$] (D) at (1,4) {};
+                        \node [empty,label=below:$x_{21}$] (E) at (2,1) {};
+                        \node [empty,label=below:$x_{22}$] (F) at (2,2) {};
+                        \node [empty,label=below:$x_{23}$] (G) at (2,3) {};
+                         \node [empty,label=above:$x_{24}$] (H) at (2,4) {};
+					 \node [empty,label=below:$x_{31}$] (I) at (3,1) {};
+                        \node [empty,label=below:$x_{32}$] (J) at (3,2) {};
+                        \node [empty,label=below:$x_{33}$] (K) at (3,3) {};
+                        \node [empty,label=above:$x_{34}$] (L) at (3,4) {};
+                        \node [empty,label=below:$x_{41}$] (M) at (4,1) {};
+                        \node [empty,label=right:$x_{42}$] (N) at (4,2) {};
+                        \node [empty,label=right:$x_{43}$] (O) at (4,3) {};
+                         \node [empty,label=above:$x_{44}$] (P) at (4,4) {};
+    \draw[line width=1pt] (A) -- (B);
+    \draw[line width=1pt] (B) -- (C);
+    \draw[line width=1pt] (C) -- (D);
+    
+    \draw[line width=1pt] (F) -- (G);
+    \draw[line width=1pt] (G) -- (H);
+    \draw[line width=1pt] (E) -- (F);
+    
+    \draw[line width=1pt] (I) -- (J);
+    \draw[line width=1pt] (J) -- (K);
+    \draw[line width=1pt] (K) -- (L);
+    
+    \draw[line width=1pt] (M) -- (N);
+    \draw[line width=1pt] (N) -- (O);
+    \draw[line width=1pt] (O) -- (P);
+    
+     \draw[line width=1pt] (A) -- (E);
+    \draw[line width=1pt] (E) -- (I);
+    \draw[line width=1pt] (I) -- (M);
+    
+     \draw[line width=1pt] (B) -- (F);
+    \draw[line width=1pt] (F) -- (J);
+    \draw[line width=1pt] (J) -- (N);
+    
+    \draw[line width=1pt] (C) -- (G);
+    \draw[line width=1pt] (G) -- (K);
+    \draw[line width=1pt] (K) -- (O);
+    
+     \draw[line width=1pt] (D) -- (H);
+    \draw[line width=1pt] (H) -- (L);
+    \draw[line width=1pt] (L) -- (P);
+    \end{tikzpicture}
+
+\centering    
+  \noindent
+\renewcommand\arraystretch{1.5}
+\setlength\tabcolsep{0pt}
+\begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
+  \multirow{10}{*}{\parbox{1.1cm}{\bfseries\raggedleft}} & 
+    & \multicolumn{2}{c}{\bfseries matrice de contrainte} & \\
+  && \bfseries x & \bfseries y & \bfseries \\
+  &x& \MyBox{ (1)}{TU} & \MyBox{(1)}{identidé -1}&y  \\[2.4em]
+  &x& \MyBox{ (2)}{0} & \MyBox{(2)}{identidé -1} &y\\
+  &x& \MyBox{(3)}{identidé -1} & \MyBox{(3)}{0} &y \\[2.4em]
+  &x& \MyBox{(4)}{identidé 1} & \MyBox{(4)}{0}&y\\
+\end{tabular}
+\newline 
+\justify
+Contrainte (1) pour les variables x est une grille, une grille n'est pas de circle impair, alors une grille est biparti. Par la collaire 6.1 vue en cours de PM, la matrie sommet-arête d'un graphe biparti. Alors contrainte (1) pour les variables x est bien TU. Par ailleurs, les variables y est une matrice idendité, le second membre de contrainte est un nombre entier -1. Par la propriété vue en cours de OG: Propriété 2 : si une matrice est TU, alors la juxtaposition de cette matrice avec la matrice identité est aussi une matrice TU. On a contrainte (1) est bien TU.
+
+Contrainte (2),(3),(4) sont des matrices identités avec le seconde membre de contrainte sont un nombre entier. Ils sont TU.
+
+Par la caractérisation de Ghouila-Houri vue en cours OG : une matrice est TU ssi tout sousensemble de colonnes peut être partitionné en deux parties telles que, sur chaque ligne, les sommes des éléments sur chacune de ces deux parties diffèrent d'au plus 1. Le matrice combinaision de contrainte (1), (2), (3), (4) peut-être partitioné en deux parties vérifié ce définition. On peut aussi calculer le det(x,y). On peut alors montrer ces contraintes sont TU.
+\section{Question iv et v)}
+Sans contrainte (5)\\
+1)Le première instance,\\
+Pour le modèle P1, le temps de calculer est 0.00s, 0 noeud, valeur opt est 8219.5782. Nombre de parcelles non coupées est 21. lisère est 84,et e1 est 6630. Pour le modèle P2, valeur opt est la même, le temps de calculer est 0.01s, 0 noeud. Tous les solution sont la même.
+2)Le seconde instance,\\
+Pour le modèle P1, le temps de calculer est 0.01s,0 noeud, valeur opt est 442.55536. Nombre de parcelles non coupées est 5, lisère est 16, e1 est 382.
+
+\section{Question vi)}
+Le solution pour le données de prof est 6753.9332, par modèle P1 avec le contriante (5) . Il faut déclarer x et y int. Le temps est 0.06s
+
+Le solution pour le données de prof est 6753.9331999, le temps, est 0.01s, par modèle P2 avec le contrainte (5).
+
+si on ajoute le contrainte (5) 
+	$\sum -x_{ij}\leq 60,\forall i,j \in [[\![1,n]\!]$, il n'est plus TU car il y a au moin 60 de -1 dans chaque row. Si on l'ajoute ce matrice dans la matrice obtenu dans (iii), il n'est plus TU.
+
+\section{Question vii)}
+On change le façon de déclaration des variable. On peut toujours obtenir une solution en nombre entier par le modèle P2 car il est TU.
+
+Si on change la déclaration des variables de int à float pour P2,  il y a 434 itération avec dual simplex modèle, mais il ne change pas de valeur optimal et la solution est en nombre entier . Si on change la déclaration des variables de int à float pour P1,  le valeur optmal augemente et la solution n'est pas en nombre entier.
+
+\end{document}
