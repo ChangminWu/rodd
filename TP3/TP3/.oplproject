@@ -4,13 +4,13 @@
 		<config default="false" name="Configuration1" category="opl">
 			<ref type="model" name="tp3.mod">
 			</ref>
-			<ref type="data" name="tp3.dat">
+			<ref type="data" name="DivGenetique.dat">
 			</ref>
 		</config>
 		<config default="true" name="Configuration2" category="opl">
 			<ref type="model" name="tp3_1.mod">
 			</ref>
-			<ref type="data" name="tp3.dat">
+			<ref type="data" name="DivGenetique.dat">
 			</ref>
 		</config>
 	</configs>
