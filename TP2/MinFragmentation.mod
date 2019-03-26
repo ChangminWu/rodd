@@ -1,8 +1,3 @@
-/*********************************************
- * OPL 12.5 Model
- * Author: dascim
- * Creation Date: Jan 30, 2019 at 4:00:58 PM
- *********************************************/
 int m = ...;
 int n = ...;
 int B = ...;
@@ -56,14 +51,55 @@ subject to{
          sum(ii in col, jj in row) y[i][j][ii][jj] == x[i][j];
 }
 
+main{
+	thisOplModel.generate();
+	
+	var masterDef = thisOplModel.modelDefinition;
+    var masterCplex = cplex;
+    var masterData = thisOplModel.dataElements;
+    
+    var masterOpl = new IloOplModel(masterDef, masterCplex);
+   	masterOpl.addDataSource(masterData);
+   	masterOpl.generate()
+   	
+   	var iter = 1;
+   	var curr = 10;
+   	
+   	while(curr > 0.00){
+   	 iter += 1;   	
+   	 writeln("Solve master.");
+     masterCplex.solve() ;
+     masterOpl.postProcess();
+        
+     curr = masterCplex.getObjValue();
+     writeln();
+     writeln("MASTER OBJECTIVE: ",curr);
+       
+     var fx= masterOpl.f;
+     var gx= masterOpl.g;
+     
+     var new_lambda = fx / gx;
+     masterData.lambda = new_lambda;
+     writeln("new fx: ", fx);
+     writeln("new gx: ", gx);
+     writeln("lambda: ", masterData.lambda);
+     
+     masterOpl.end();
+     
+     masterOpl = new IloOplModel(masterDef,masterCplex);
+     masterOpl.addDataSource(masterData);
+     masterOpl.generate();
+   	}
+   	
+   	writeln("Nb iteration: ", iter);
+}
+
 execute{
   //writeln("Distance: ", distance[1][1]);
   for (var i in col) {
     for (var j in row) {
        if (x[i][j] == 1) {
-         	//writeln("col: ", i);
-         	//writeln("row: ", j);
-      		//writeln(y[i][j]);
+         	writeln(j-1, ",", m-i);
       }
       }
     }
@@ -76,46 +112,6 @@ execute{
     }
    writeln(s);
   }
-
-main{
-  	var new_lambda;
-  	
-	
-	var masterDef = thisOplModel.modelDefinition;
-    var masterCplex = cplex;
-    var masterData = thisOplModel.dataElements;
-    
-    var masterOpl = new IloOplModel(masterDef, masterCplex);
-   	masterOpl.addDataSource(masterData);
-   	masterOpl.generate()
-   	
-   	var curr = 10;
-   	
-   	while(curr > 0.00){
-   	  writeln("Solve master.");
-       masterCplex.solve() ;
-       masterOpl.postProcess();
-        
-        curr = masterCplex.getObjValue();
-        writeln();
-        writeln("MASTER OBJECTIVE: ",curr);
-       
-     var fx= masterOpl.f;
-     var gx= masterOpl.g;
-     
-     new_lambda = fx / gx;
-     masterData.lambda = new_lambda;
-     writeln("new fx: ", fx);
-     writeln("new gx: ", gx);
-     writeln("lambda: ", masterData.lambda);
-      
-     masterOpl.end();
-      
-     masterOpl = new IloOplModel(masterDef,masterCplex);
-     masterOpl.addDataSource(masterData);
-     masterOpl.generate();
-   	}     
-}
 
 	
 	

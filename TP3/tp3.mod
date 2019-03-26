@@ -60,24 +60,31 @@ subject to {
   forall (i in 1..G, j in 1..A)
     y[i][j] <= 1;
   
-  sum(i in 1..N) x[i] == N;
+  sum(i in 1..Nm) x[i] == N;
   sum(i in 1..Nm) x[i] == sum(i in Nm+1..N) x[i];
   
   forall (i in 1..N)
-    x[i] <= 2;
+    x[i] <= 3;
   
   forall (i in 1..G, j in 1..A)
-    forall(r in 1..T : filter[i][j] > 0)
+    forall(r in 1..T: filter[i][j] > 0)
       //if (prod(k in human) proba[k][i][j] == 0 ){
         	//y[i][j] >= 0;
       //  }
       //else{ 
-    	(T-r) * log(init) / (T-1) -1 + y[i][j] / (pow(init, (T-r)/(T-1))) >= sum(k in human) x[k] * log(proba[k][i][j]);
+    	(T-r) * ln(init) / (T-1) -1 + y[i][j] / (pow(init, (T-r)/(T-1))) >= sum(k in human) x[k] * ln(proba[k][i][j]);
 	// }		
 }
 
  execute{
-	for(var i=1; i<=N; i++){
-		writeln(x[i]);
-		 	}  
+   	//writeln(group); 
+		for(var i=1; i<=G; i++){
+			for(var j=1; j<=A; j++){
+				var somme = 1;
+				for(var k=1; k<=N; k++){
+						somme *= Math.pow(proba[k][i][j], x[k]);						
+  				}
+  				writeln(i, ",", j, ": ", somme);									
+			}
+		} 	
 } 

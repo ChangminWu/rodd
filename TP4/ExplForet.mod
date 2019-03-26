@@ -1,8 +1,3 @@
-/*********************************************
- * OPL 12.8.0.0 Model
- * Author: dascim
- * Creation Date: Feb 13, 2019 at 3:27:12 PM
- *********************************************/
 int P = ...;
 int m = ...;
 int n = ...;
@@ -46,13 +41,22 @@ subject to{
 	forall (i in 1..m, j in 1..n, k in 1..m, b in 1..n: adj[i][j][k][b]==1) {
 		1-x[i][j]-x[k][b]+y[i][j][k][b] >= 0;
 		y[i][j][k][b]>=0;}
-		//y[i][j][k][b]<=x[i][j];
-		//y[i][j][k][b]<=x[k][b]; }	
 	forall (i in 1..m, j in 1..n) {
 		x[i][j] <= 1;	
 	}
-	sum (i in 1..m, j in 1..n) x[i][j] >= 60;
-} 
+	//sum (i in 1..m, j in 1..n) x[i][j] >= 60;
+//} 
+// linear model
+//dvar float+ d[1..m][1..n];
+//maximize
+//  w1 * sum(i in 1..m, j in 1..n) t[i][j] * (1-x[i][j]) + w2 * g * L * sum(i in 1..m, j in 1..n) (4*x[i][j]-d[i][j]);
+//subject to {
+// forall (i in 1..m, j in 1..n) 
+// 	x[i][j] <= 1;
+// forall (i in 1..m, j in 1..n)
+//    d[i][j] >= sum(k in 1..m, b in 1..n) adj[i][j][k][b] * x[k][b] - sum(k in 1..m, b in 1..n) adj[i][j][k][b] * (1-x[i][j]);
+// sum(i in 1..m, j in 1..n) x[i][j] >= 60;   
+}  
 
 execute{
 	var eff1 = 0;
@@ -60,20 +64,19 @@ execute{
 	var cons = 0;
 	for(var i=1; i<=m; i++) {
 		for(var j=1; j<=n; j++) {
-			eff1 += w1 * t[i][j] * (1-x[i][j]);
+			eff1 += w1 * t[i][j] * (1-x[i][j]); 
 			cons += x[i][j];			
 		}	
 	}
-	//writeln(cons);
+	writeln(cons);
 	writeln(eff1);
 	for(var i=1; i<=m; i++) {
 		for(var j=1; j<=n; j++) {
 			if (x[i][j]==1) {
-				writeln(i, ", ", j);
+				writeln(j-1, ", ", m-i);
 			}			
 		}	
 	}
-	//writeln(y[9][9]);
 }
     
 
