@@ -14,7 +14,7 @@
 \usepackage{indentfirst}
 \usepackage{bbm}
 \usepackage{multirow}
-\advance\day by -1
+\advance\day by -2
 
 \title{Problème de planification culturale durable \footnote{Ce rapport est destiné au TP7 de cours Recherche Opérationnelle et Développement Durable du programme MPRO encadré par Professeur Agnès Plateau sur le sujet de la planification culturale.}}
 
@@ -25,6 +25,22 @@
 \maketitle
 \tableofcontents
 
+\section{Quelques notations}
+\begin{itemize}
+    \item $\mathcal{T}$: $\{1, \ldots, T\}$ le horizon de planification.
+    \item $\mathcal{P}$: $\{1, \ldots, P\}$ ensemble des parcelles utilisables.
+    \item $s(t)$: $s(t)=1$ temps impair; $s(t)=2$ temps pair.
+    \item $C(s(t))$: ensemble des cultures cultivables au temps $t$.
+    \item $D_{j,t}$: demande en tonnes de culture $j$ au temps $t$.
+    \item $(l,a,j)$: état d'une parcelle où
+    \begin{itemize}
+        \item $l$: le nombre de temps consécutifs de jachère.
+        \item $a$: le nombre de temps consécutifs de culture (si $j \neq 0$).
+        \item $j$: $C \cup \{0\}$ où $C$ l'ensemble des cultures cultivables et $0$ la jachère.
+    \end{itemize}
+    \item $(l',a',i) -> (l,a,j)$: une transition d'une parcelle d'état $(l',a',i)$ à $(l,a,j)$ qui est associé avec un rendement $\text{REND}(l,a,i,j)$.
+\end{itemize}
+
 \section{Une représentation du graphe}
 Figure \ref{fig:diam} présente un tel graphe dont chaque sommet désigne un état possible de la forme $(l,a,j)$. Un chemin qui commence par $(2,0,0)$ (et de longueur $5$) est donc une rotation de $T=5$ sur la parcelle $p$, par exemple, le chemin $(2,0,0)->(2,1,R)->(2,2,H)->(1,0,0)->(1,1,H)->(1,0,0)$. 
 \begin{figure}[h!t]
@@ -33,18 +49,19 @@ Figure \ref{fig:diam} présente un tel graphe dont chaque sommet désigne un ét
     \caption{Graphe $G$: les arcs rouges correspondent à une rotation possible; $R$ est \textit{riz} et $H$ est \textit{haricot}}
     \label{fig:diam}
 \end{figure}
+Notons que chaque arc désigne une transition $(l',a',i) -> (l,a,j)$, on peut donc associer chaque arc un rendement $\text{REND}_{arc} = \text{REND}(l,arc,i,j)$ où $arc = (l',a',i) -> (l,a,j)$
 
 \section{Modélisation PLNE}
 Étant donnée la représentation du graphe, on peut modéliser ce problème de planification comme $P$ problème de flot sur $P$ graphe $G$ qui satisfit une contrainte globale. 
 \begin{equation*}
     (P1) \left\{ 
     \begin{aligned}
-    \min\quad        & \sum_{p\in P}\sum_{t=1}\sum_{a\in Arc} x_{p,t,a}   \\
-    \text{s.t.\quad} & \sum_{p\in P}\sum_{a\in Arc^{-}_{j}} \text{REND}_a x_{p,t,a} \geq D_{j,t} & & \forall t\in \{1, \ldots, T\}, j \in C(s(t)) \\
-                     & \sum_{a\in Arc^{-}_{v}} x_{p,t,a} = \sum_{b\in Arc^{+}_{v}} x_{p,t,b} & & \forall t \in \{2, \ldots, T-1\}, p \in \{1, \ldots, P\}, v\in V(G)\\
-                     & \sum_{a\in Arc^{-}_{(2,0,0)}} x_{p,1,a} \leq 1 & &  \forall p \in \{1, \ldots, P\} \\
-                     & \sum_{a\not\in Arc^{-}_{(2,0,0)}} x_{p,1,a} = 0 & &  \forall p \in \{1, \ldots, P\} \\
-                     & x_{p,t,a} \in \{0,1\} & & \forall t \in \{1, \ldots, T\}, p \in \{1, \ldots, P\}, a \in Arcs
+    \min\quad        & \sum_{p\in P}\sum_{t=1}\sum_{arc \in Arcs^{-}_{(2,0,0)}} x_{p,t,arc}   \\
+    \text{s.t.\quad} & \sum_{p\in P}\sum_{arc \in Arcs^{-}_{j}} \text{REND}_{arc} x_{p,t,arc} \geq D_{j,t} & & \forall t\in \mathcal{T}, j \in C(s(t)) \\
+                     & \sum_{arc \in Arcs^{-}_{v}} x_{p,t,arc} = \sum_{b \in Arcs^{+}_{v}} x_{p,t+1,b} & & \forall t \in \mathcal{T}\backslash\{1,T\}, p \in \mathcal{P}, v\in V(G)\\
+                     & \sum_{arc \in Arcs^{-}_{(2,0,0)}} x_{p,1,arc} \leq 1 & &  \forall p \in \mathcal{P} \\
+                     & \sum_{arc \not\in Arcs^{-}_{(2,0,0)}} x_{p,1,arc} = 0 & &  \forall p \in \mathcal{P} \\
+                     & x_{p,t,arc} \in \{0,1\} & & \forall t \in \mathcal{T}, p \in \mathcal{P}, arc \in Arcs
   \end{aligned}
 \right.
 \end{equation*}
@@ -67,15 +84,19 @@ Voir tableau \ref{tab:res}.
 \end{table}
 
 \section{Une ré-formulation}
-Supposons que les rotations $r$ sont énumérable, on a
+Supposons que les rotations $r$ sont énumérable, et elle est représentée par une suite de transitions (arcs). on a
 \begin{equation*}
     (P2) \left\{ 
     \begin{aligned}
     \min\quad        & \sum_{r \in R} x_{r}   \\
-    \text{s.t.\quad} & \sum_{r \in R} \text{REND}_{r_t = } x_{r} \geq D_{j,t} & & \forall t\in \{1, \ldots, T\}, j \in C(s(t))\\
-                     & x_i \in \{0,1\}            & & i\in N
+    \text{s.t.\quad} & \sum_{r \in R} A_{j,t,r} x_{r} \geq D_{j,t} & & \forall t\in \mathcal{T}, j \in C(s(t))\\
+                     & x_r \in \mathbbm{Z}_+            & & \forall r
   \end{aligned}
 \right.
 \end{equation*}
-\section{Génération du colonnes}
+où $r_t$ est la transition de la rotation $r$ au temps $t$, $A_{j,t,r} = \text{REND}_{r_t}$ si $r_t \in Arcs^{-}_{j}$ et $0$ autrement. 
+
+\section{Génération de colonnes}
+Quand on applique l'algorithme de la génération de colonnes, tout d'abord on cherche la solution pour le dual du programme $P2$ (ou sa relaxation) avec variables duales $z_{j,t}$. Après avec la solution trouvée de $z_{j,t}$, on cherche un nouveau colonne $A_{k}$ qui minimise le coût réduit négatif $1-\sum_{j,t} z_{j,t} A_{j,t,k}$. Donc si on associe à chaque arc de $G$ un coût de $-z_{j,t}\text{REND}_{arc}$, le problème peut être réduit à un problème du plus court chemin dans un graphe pondéré, que on peut résoudre facilement par l'algorithme de Bellman à chaque itération du processus de génération de colonnes jusqu'à où on ne peut plus trouver un chemin dont le coût réduit est négatif. 
+
 \end{document}
