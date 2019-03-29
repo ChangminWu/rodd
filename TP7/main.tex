@@ -84,12 +84,13 @@ Voir tableau \ref{tab:res}.
 \end{table}
 
 \section{Une ré-formulation}
-Supposons que les rotations $r$ sont énumérable, et elle est représentée par une suite de transitions (arcs). on a
+Each rotation is a chemin from t=1 to t=T, the objective is to find the chemin which use the least parcelle. And every chemin need to satistify the demande of every period. To make it more clear, every $r$ has T+1 variable. For example, a solution chemin(rotation) r: $(2,0,0)->(2,1,R)->(2,2,H)->(1,0,0)->(1,1,H)->(1,0,0)$ where $x_r$=19, $r_{t1}=(2,0,0)$,  $r_{t2}=(2,1,R)$,...,$r_{t5}=(1,1,H)$and $r_{t6}=(1,0,0)$. The contraintes is at everytime t $\in $ T, the demand $D_t$ is satisfied.
+
 \begin{equation*}
     (P2) \left\{ 
     \begin{aligned}
-    \min\quad        & \sum_{r \in R} x_{r}   \\
-    \text{s.t.\quad} & \sum_{r \in R} A_{j,t,r} x_{r} \geq D_{j,t} & & \forall t\in \mathcal{T}, j \in C(s(t))\\
+    \min\quad   x_{r}   \\
+    \text{s.t.\quad} & REND_{r_t} \geq D_{t} & & \forall t\in \mathcal{T}\\
                      & x_r \in \mathbbm{Z}_+            & & \forall r
   \end{aligned}
 \right.
