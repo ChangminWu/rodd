@@ -126,7 +126,7 @@ that means we won't choose the chemin.With the contraintes,demande of every time
 \right.
 \end{equation*}
 
-We dualize $newcollne_{j,t}$ contrainte of the master problem, and put them into dual variable.  Every time when we solve the slave problem, the solution z that we get is a new solution, or we say it, a new chemin réalisable for the master problem.
+We dualize contrainte of the master problem, and put them into dual variable $dual_{j,t}$.  
 
 \begin{equation*}
     (slave) \left\{ 
@@ -135,7 +135,10 @@ We dualize $newcollne_{j,t}$ contrainte of the master problem, and put them into
   \end{aligned}
 \right.
 \end{equation*}
+Every time when we solve the slave problem, the solution $newcolonne_{j,t}$ we get is a new solution, or we say it, a new chemin réalisable for the master problem.
 
-As the process of algo, we will have more and more colonnes to make a choice in them. Everytime we solve one time slave problem, and them we solve master problem again. If the coût réduit is négatif, we can keep on generate new colonne, until the coût réduit $\geq$0, we stop generate new colonne, and the current solution of master problem is optimal.
+As the process of algo, we will have more and more colonnes to make a choice among them(every time we generate a new colonne by slave problem, we solve master problem another time).
+
+If the coût réduit is négatif, we can keep on generate new colonne, until the coût réduit $\geq$0, we stop generate new colonne, and the current solution of master problem is optimal.
 
 \end{document}
