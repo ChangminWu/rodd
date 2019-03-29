@@ -91,11 +91,10 @@ Each rotation is a chemin from t=1 to t=T, the objective is to find the chemin w
     \begin{aligned}
     \min\quad   x_{r}   \\
     \text{s.t.\quad} & REND_{r_t} \geq D_{t} & & \forall t\in \mathcal{T}\\
-                     & x_r \in \mathbbm{Z}_+            & & \forall r
   \end{aligned}
 \right.
 \end{equation*}
-où $r_t$ est la transition de la rotation $r$ au temps $t$, $A_{j,t,r} = \text{REND}_{r_t}$ si $r_t \in Arcs^{-}_{j}$ et $0$ autrement. 
+où $r_t$ est la transition de la rotation $r$ au temps $t$, ${REND}_{r_t} $is the rendment at the period $t$ of rotation $r$. 
 
 \section{Génération de colonnes}
 
