@@ -84,17 +84,17 @@ Voir tableau \ref{tab:res}.
 \end{table}
 
 \section{Une ré-formulation}
-Each rotation is a chemin from t=1 to t=T, the objective is to find the chemin which use the least parcelle. And every chemin need to satistify the demande of every period. To make it more clear, every $r$ has T+1 variable. For example, a solution chemin(rotation) r: $(2,0,0)->(2,1,R)->(2,2,H)->(1,0,0)->(1,1,H)->(1,0,0)$ where $x_r$=19, $r_{t1}=(2,0,0)$,  $r_{t2}=(2,1,R)$,...,$r_{t5}=(1,1,H)$and $r_{t6}=(1,0,0)$. The contraintes is at everytime t $\in $ T, the demand $D_t$ is satisfied.
-
+Each rotation is a chemin from t=1 to t=T, the objective is to find the chemin which use the least parcelle. And every chemin need to satistify the demande of every period. To make it more clear, every $r$ has T+1 variable. For example, a solution chemin(rotation) r: $(2,0,0)->(2,1,R)->(2,2,H)->(1,0,0)->(1,1,H)->(1,0,0)$ where $x_r$=1, $r_{t1}=(2,0,0)$,  $r_{t2}=(2,1,R)$,...,$r_{t5}=(1,1,H)$and $r_{t6}=(1,0,0)$. The contraintes is at everytime t $\in $ T, the demand $D_t$ is satisfied. We suppose that we can make the rotation r on the one parcelle.
 \begin{equation*}
     (P2) \left\{ 
     \begin{aligned}
-    \min\quad   x_{r}   \\
-    \text{s.t.\quad} & REND_{r_t} \geq D_{t} & & \forall t\in \mathcal{T}\\
+    \min\quad    & \sum_{r \in Rotations} x_{r}\\
+   \text{s.t.\quad} & \sum_{r \in R} A_{j,t,r} x_{r} \geq D_{j,t,r} & & \forall t\in \mathcal{T}, j \in C(s(t))\\
+                     & x_r \in \mathbbm{Z}_+            & & \forall r
   \end{aligned}
 \right.
 \end{equation*}
-où $r_t$ est la transition de la rotation $r$ au temps $t$, ${REND}_{r_t} $is the rendment at the period $t$ of rotation $r$. 
+où $r_t$ est la transition de la rotation $r$ au temps $t$, $A_{j,r}={REND}_{r_t} $is the rendment at the period $t$ of rotation $r$. 
 
 \section{Génération de colonnes}
 
