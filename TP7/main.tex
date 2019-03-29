@@ -131,15 +131,11 @@ We dualize $newcollne_{j,t}$ contrainte of the master problem, and put them into
 \begin{equation*}
     (slave) \left\{ 
     \begin{aligned}
-    \min\quad  & 1-\sum_{j,t} newcolonne_{j,t}\cdot A_{j,t,k} \\
+    \min\quad  & 1-\sum_{j,t} newcolonne_{j,t}\cdot dual_{j,t}\\
   \end{aligned}
 \right.
 \end{equation*}
 
-As the process of algo, we will have more and more colonnes to make a choice in them. Everytime we solve one time slave problem, and them we solve master problem again. If the coût réduit is négatif, we can keep on generate new colonne, until the coût réduit $\geq$>=0, we stop generate new colonne, and the solution of master problem is optimal.
-
-Quand on applique l'algorithme de la génération de colonnes, tout d'abord on cherche la solution pour le dual du programme $P2$ (ou sa relaxation) avec variables duales $newcollone_{j,t}$. Après avec la solution trouvée de $z_{j,t}$, on cherche un nouveau colonne $A_{k}$ qui minimise le coût réduit négatif $1-\sum_{j,t} newcolonne_{j,t} A_{j,t,k}$. 
-
-Donc si on associe à chaque arc de $G$ un coût de $-newcolonne_{j,t}\text{REND}_{arc}$, le problème peut être réduit à un problème du plus court chemin dans un graphe pondéré, que on peut résoudre facilement par l'algorithme de Bellman à chaque itération du processus de génération de colonnes jusqu'à où on ne peut plus trouver un chemin dont le coût réduit est négatif. 
+As the process of algo, we will have more and more colonnes to make a choice in them. Everytime we solve one time slave problem, and them we solve master problem again. If the coût réduit is négatif, we can keep on generate new colonne, until the coût réduit $\geq$0, we stop generate new colonne, and the current solution of master problem is optimal.
 
 \end{document}
