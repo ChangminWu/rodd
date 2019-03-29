@@ -1,0 +1,7 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Quelques notations}{1}
+\contentsline {section}{\numberline {2}Une repr\IeC {\'e}sentation du graphe}{2}
+\contentsline {section}{\numberline {3}Mod\IeC {\'e}lisation PLNE}{2}
+\contentsline {section}{\numberline {4}R\IeC {\'e}sultat}{3}
+\contentsline {section}{\numberline {5}Une r\IeC {\'e}-formulation}{3}
+\contentsline {section}{\numberline {6}G\IeC {\'e}n\IeC {\'e}ration de colonnes}{3}
